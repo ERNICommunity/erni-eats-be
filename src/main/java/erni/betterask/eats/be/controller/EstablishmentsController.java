@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
@@ -29,11 +30,13 @@ public class EstablishmentsController {
     }
 
     @GetMapping()
+    @CrossOrigin
     public Mono<List<Establishment>> getAllEstablishments() {
         return Mono.just(establishmentConfigurationService.findAll());
     }
 
     @GetMapping(path = "/{establishmentId}")
+    @CrossOrigin
     public Mono<Establishment> getEstablishment(@PathVariable String establishmentId) {
         return establishmentConfigurationService.findById(establishmentId)
                 .map(Mono::just)
@@ -41,6 +44,7 @@ public class EstablishmentsController {
     }
 
     @GetMapping(path = "/{establishmentId}/daily-menu")
+    @CrossOrigin
     public Mono<ResponseEntity<List<Meal>>> getDailyMenu(@PathVariable String establishmentId, @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)LocalDate date) {
         date = Optional
                 .ofNullable(date)
