@@ -5,5 +5,5 @@ import erni.betterask.eats.be.model.Review;
 import java.util.List;
 
 public interface EstablishmentReviewsService {
-    List<Review> getReviewsByEstablishmentId(String establishmentId);
+    List<Review> findByEstablishmentId(String establishmentId);
 }

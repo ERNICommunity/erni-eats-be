@@ -27,7 +27,7 @@ public class EstablishmentReviewsServiceImpl implements EstablishmentReviewsServ
     );
 
     @Override
-    public List<Review> getReviewsByEstablishmentId(String establishmentId) {
+    public List<Review> findByEstablishmentId(String establishmentId) {
         return mockedReviews.stream()
                 .filter(review -> review.establishmentId.equals(establishmentId))
                 .collect(Collectors.toList());
