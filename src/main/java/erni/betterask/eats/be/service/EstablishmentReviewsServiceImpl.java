@@ -20,7 +20,7 @@ public class EstablishmentReviewsServiceImpl implements EstablishmentReviewsServ
             Review.builder()
                     .id("01")
                     .establishmentId("clock-block")
-                    .authorName("John Doe")
+                    .authorName("Jane Doe")
                     .reviewText("Terrible!")
                     .rating(1.0f)
                     .build()
