@@ -46,17 +46,6 @@ public class EstablishmentConfigurationServiceImpl implements EstablishmentConfi
                     .userRatingsTotal(124)
                     .build(),
             Establishment.builder()
-                    .id("classic-restaurant-pub")
-                    .restaurantId("einpark-4")
-                    .name("Classic restaurant & pub")
-                    .type(EstablishmentType.RESTAURANT)
-                    .websiteUrl("https://www.facebook.com/ClassicRestaurantPub/")
-                    .dailyMenuUrl("https://restauracie.sme.sk/restauracia/classic-restaurant-pub_626-petrzalka_664")
-                    .priceLevel(PriceLevel.MODERATE)
-                    .rating(4.1f)
-                    .userRatingsTotal(238)
-                    .build(),
-            Establishment.builder()
                     .id("sidliskova-pivarnicka")
                     .restaurantId("einpark-5")
                     .name("Sídliskova pivarnička")
