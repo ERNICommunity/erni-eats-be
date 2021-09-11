@@ -84,8 +84,6 @@ public class EstablishmentsController {
         }
 
         var headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + establishmentId + "-logo.png");
         headers.add("Access-Control-Expose-Headers", "Content-Disposition");
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
