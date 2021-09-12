@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.List;
+
 @Data
 @Builder
 public class ContactInfo {
@@ -16,7 +18,8 @@ public class ContactInfo {
     @NonNull
     public String address;
 
-    public String openHours;
+    @NonNull
+    public List<OpenHours> openHours;
 
     @NonNull
     public String coordinates;
