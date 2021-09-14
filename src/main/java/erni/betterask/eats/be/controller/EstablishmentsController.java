@@ -1,9 +1,13 @@
 package erni.betterask.eats.be.controller;
 
+import erni.betterask.eats.be.model.ContactInfo;
 import erni.betterask.eats.be.model.Establishment;
 import erni.betterask.eats.be.model.Meal;
+import erni.betterask.eats.be.model.Review;
 import erni.betterask.eats.be.service.EstablishmentConfigurationService;
+import erni.betterask.eats.be.service.EstablishmentContactInfoService;
 import erni.betterask.eats.be.service.EstablishmentMenuService;
+import erni.betterask.eats.be.service.EstablishmentReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -28,13 +32,22 @@ public class EstablishmentsController {
     private final Clock clock;
     private final EstablishmentConfigurationService establishmentConfigurationService;
     private final EstablishmentMenuService establishmentMenuService;
+    private final EstablishmentReviewsService establishmentReviewsService;
+    private final EstablishmentContactInfoService establishmentContactInfoService;
 
     @Autowired
-    public EstablishmentsController(Clock clock, EstablishmentConfigurationService establishmentConfigurationService, EstablishmentMenuService establishmentMenuService) {
+    public EstablishmentsController(
+            Clock clock,
+            EstablishmentConfigurationService establishmentConfigurationService,
+            EstablishmentMenuService establishmentMenuService,
+            EstablishmentReviewsService establishmentReviewsService,
+            EstablishmentContactInfoService establishmentContactInfoService) {
         super();
         this.clock = clock;
         this.establishmentConfigurationService = establishmentConfigurationService;
         this.establishmentMenuService = establishmentMenuService;
+        this.establishmentReviewsService = establishmentReviewsService;
+        this.establishmentContactInfoService = establishmentContactInfoService;
     }
 
     @GetMapping()
@@ -71,10 +84,21 @@ public class EstablishmentsController {
         }
 
         var headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=" + establishmentId + "-logo.png");
         headers.add("Access-Control-Expose-Headers", "Content-Disposition");
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/{establishmentId}/reviews")
+    @ResponseBody
+    public List<Review> getReviewsByEstablishmentId(@PathVariable String establishmentId) {
+        return establishmentReviewsService.findByEstablishmentId(establishmentId);
+    }
+
+    @GetMapping(value = "/{establishmentId}/contact-info")
+    @ResponseBody
+    public ContactInfo getContactInfoByEstablishmentId(@PathVariable String establishmentId) {
+        return establishmentContactInfoService.findByEstablishmentId(establishmentId)
+                .orElseThrow();
     }
 }
