@@ -38,4 +38,6 @@ public class Establishment {
     public int userRatingsTotal;
 
     public PriceLevel priceLevel;
+
+    public ContactInfo contactInfo;
 }
