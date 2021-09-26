@@ -7,6 +7,7 @@ import erni.betterask.eats.be.model.PriceLevel;
 import erni.betterask.eats.be.model.MealType;
 import erni.betterask.eats.be.service.EstablishmentConfigurationService;
 import erni.betterask.eats.be.service.EstablishmentMenuService;
+import erni.betterask.eats.be.service.EstablishmentReviewsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +44,8 @@ public class EstablishmentsControllerTest {
     EstablishmentConfigurationService establishmentConfigurationService;
     @MockBean
     EstablishmentMenuService establishmentMenuService;
+    @MockBean
+    EstablishmentReviewsService establishmentReviewsService;
 
     @MockBean
     Clock clock;
