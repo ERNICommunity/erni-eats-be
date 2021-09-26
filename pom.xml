@@ -9,8 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>erni.betterask.eats</groupId>
-	<artifactId>be</artifactId>
+	<artifactId>eat11-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>eat11-backend</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -69,6 +70,14 @@
 							<artifactId>lombok</artifactId>
 						</exclude>
 					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.3.1</version>
+				<configuration>
+					<webXml>/src/main/webapp</webXml>
 				</configuration>
 			</plugin>
 		</plugins>
