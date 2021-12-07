@@ -1,13 +1,14 @@
-package erni.betterask.eats.be.service;
+package erni.betterask.eats.be.service.establishment.mock;
 
 import erni.betterask.eats.be.model.*;
+import erni.betterask.eats.be.service.establishment.ConfigurationService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class EstablishmentConfigurationServiceImpl implements EstablishmentConfigurationService {
+public class ConfigurationServiceImpl implements ConfigurationService {
     private static final List<Establishment> mockedEstablishments = List.of(
             Establishment.builder()
                     .id("clock-block")
