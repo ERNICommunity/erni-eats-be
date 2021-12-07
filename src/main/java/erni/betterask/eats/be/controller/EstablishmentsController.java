@@ -3,9 +3,9 @@ package erni.betterask.eats.be.controller;
 import erni.betterask.eats.be.model.Establishment;
 import erni.betterask.eats.be.model.Meal;
 import erni.betterask.eats.be.model.Review;
-import erni.betterask.eats.be.service.EstablishmentConfigurationService;
-import erni.betterask.eats.be.service.EstablishmentMenuService;
-import erni.betterask.eats.be.service.EstablishmentReviewsService;
+import erni.betterask.eats.be.service.establishment.ConfigurationService;
+import erni.betterask.eats.be.service.establishment.MenuService;
+import erni.betterask.eats.be.service.establishment.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -28,31 +28,31 @@ import java.util.Optional;
 @RequestMapping("api/v1/establishments")
 public class EstablishmentsController {
     private final Clock clock;
-    private final EstablishmentConfigurationService establishmentConfigurationService;
-    private final EstablishmentMenuService establishmentMenuService;
-    private final EstablishmentReviewsService establishmentReviewsService;
+    private final ConfigurationService configurationService;
+    private final MenuService menuService;
+    private final ReviewsService reviewsService;
 
     @Autowired
     public EstablishmentsController(
             Clock clock,
-            EstablishmentConfigurationService establishmentConfigurationService,
-            EstablishmentMenuService establishmentMenuService,
-            EstablishmentReviewsService establishmentReviewsService) {
+            ConfigurationService configurationService,
+            MenuService menuService,
+            ReviewsService reviewsService) {
         super();
         this.clock = clock;
-        this.establishmentConfigurationService = establishmentConfigurationService;
-        this.establishmentMenuService = establishmentMenuService;
-        this.establishmentReviewsService = establishmentReviewsService;
+        this.configurationService = configurationService;
+        this.menuService = menuService;
+        this.reviewsService = reviewsService;
     }
 
     @GetMapping()
     public Mono<List<Establishment>> getAllEstablishmentConfigurations() {
-        return Mono.just(establishmentConfigurationService.findAll());
+        return Mono.just(configurationService.findAll());
     }
 
     @GetMapping(path = "/{establishmentId}")
     public Mono<Establishment> getEstablishmentConfiguration(@PathVariable String establishmentId) {
-        return establishmentConfigurationService.findById(establishmentId)
+        return configurationService.findById(establishmentId)
                 .map(Mono::just)
                 .orElseThrow();
     }
@@ -63,13 +63,13 @@ public class EstablishmentsController {
                 .ofNullable(date)
                 .orElse(LocalDate.now(this.clock));
 
-        return establishmentMenuService.getMeals(establishmentId, date);
+        return menuService.getMeals(establishmentId, date);
     }
 
     @GetMapping(value = "/{establishmentId}/logo")
     @ResponseBody
     public ResponseEntity<Resource> getLogo(@PathVariable String establishmentId) {
-        establishmentConfigurationService.findById(establishmentId)
+        configurationService.findById(establishmentId)
                 .map(Establishment::getId)
                 .orElseThrow();
 
@@ -87,6 +87,6 @@ public class EstablishmentsController {
     @GetMapping(value = "/{establishmentId}/reviews")
     @ResponseBody
     public List<Review> getReviewsByEstablishmentId(@PathVariable String establishmentId) {
-        return establishmentReviewsService.findByEstablishmentId(establishmentId);
+        return reviewsService.findByEstablishmentId(establishmentId);
     }
 }

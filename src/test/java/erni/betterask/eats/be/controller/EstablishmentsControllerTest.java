@@ -5,9 +5,9 @@ import erni.betterask.eats.be.model.Establishment;
 import erni.betterask.eats.be.model.EstablishmentType;
 import erni.betterask.eats.be.model.PriceLevel;
 import erni.betterask.eats.be.model.MealType;
-import erni.betterask.eats.be.service.EstablishmentConfigurationService;
-import erni.betterask.eats.be.service.EstablishmentMenuService;
-import erni.betterask.eats.be.service.EstablishmentReviewsService;
+import erni.betterask.eats.be.service.establishment.ConfigurationService;
+import erni.betterask.eats.be.service.establishment.MenuService;
+import erni.betterask.eats.be.service.establishment.ReviewsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,21 +41,19 @@ public class EstablishmentsControllerTest {
     WebTestClient webTestClient;
 
     @MockBean
-    EstablishmentConfigurationService establishmentConfigurationService;
+    ConfigurationService configurationService;
     @MockBean
-    EstablishmentMenuService establishmentMenuService;
+    MenuService menuService;
     @MockBean
-    EstablishmentReviewsService establishmentReviewsService;
+    ReviewsService reviewsService;
 
     @MockBean
     Clock clock;
 
-    private Clock fixedClock;
-
     @BeforeEach
     public void initMocks() {
         MockitoAnnotations.openMocks(this);
-        fixedClock = Clock.fixed(LocalDate.of(2050, 10, 10).atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
+        Clock fixedClock = Clock.fixed(LocalDate.of(2050, 10, 10).atStartOfDay(ZoneId.systemDefault()).toInstant(), ZoneId.systemDefault());
         doReturn(fixedClock.instant()).when(clock).instant();
         doReturn(fixedClock.getZone()).when(clock).getZone();
     }
@@ -74,7 +72,7 @@ public class EstablishmentsControllerTest {
                 .rating(4.9f)
                 .userRatingsTotal(666)
                 .build();
-        when(establishmentConfigurationService.findAll()).thenReturn(List.of(establishment));
+        when(configurationService.findAll()).thenReturn(List.of(establishment));
 
         webTestClient.get()
                 .uri("/api/v1/establishments")
@@ -100,7 +98,7 @@ public class EstablishmentsControllerTest {
                 .rating(4.9f)
                 .userRatingsTotal(666)
                 .build();
-        when(establishmentConfigurationService.findById(anyString())).thenReturn(Optional.of(establishment));
+        when(configurationService.findById(anyString())).thenReturn(Optional.of(establishment));
 
         webTestClient.get()
                 .uri("/api/v1/establishments/id-1")
@@ -113,7 +111,7 @@ public class EstablishmentsControllerTest {
 
     @Test
     public void shouldReturn404WhenEstablishmentIdIsNotFound() {
-        when(establishmentConfigurationService.findById(anyString())).thenReturn(Optional.empty());
+        when(configurationService.findById(anyString())).thenReturn(Optional.empty());
 
         webTestClient.get()
                 .uri("/api/v1/establishments/id-2")
@@ -129,8 +127,8 @@ public class EstablishmentsControllerTest {
                 .type(MealType.MAIN_DISH)
                 .price(BigDecimal.TEN)
                 .build();
-        when(establishmentMenuService.getMeals("id-1", LocalDate.of(2020, 1, 1))).thenReturn(Mono.just(Collections.emptyList()));
-        when(establishmentMenuService.getMeals("id-1", LocalDate.now(clock))).thenReturn(Mono.just(List.of(meal)));
+        when(menuService.getMeals("id-1", LocalDate.of(2020, 1, 1))).thenReturn(Mono.just(Collections.emptyList()));
+        when(menuService.getMeals("id-1", LocalDate.now(clock))).thenReturn(Mono.just(List.of(meal)));
 
         webTestClient.get()
                 .uri("/api/v1/establishments/id-1/daily-menu")
@@ -149,7 +147,7 @@ public class EstablishmentsControllerTest {
                 .type(MealType.MAIN_DISH)
                 .price(BigDecimal.TEN)
                 .build();
-        when(establishmentMenuService.getMeals("id-1", date)).thenReturn(Mono.just(List.of(meal)));
+        when(menuService.getMeals("id-1", date)).thenReturn(Mono.just(List.of(meal)));
 
         webTestClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -177,7 +175,7 @@ public class EstablishmentsControllerTest {
                 .rating(4.9f)
                 .userRatingsTotal(666)
                 .build();
-        when(establishmentConfigurationService.findById(anyString())).thenReturn(Optional.of(establishment));
+        when(configurationService.findById(anyString())).thenReturn(Optional.of(establishment));
 
         webTestClient.get()
                 .uri("/api/v1/establishments/clock-block/logo")

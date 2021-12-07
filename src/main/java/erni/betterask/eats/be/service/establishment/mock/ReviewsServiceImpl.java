@@ -1,13 +1,14 @@
-package erni.betterask.eats.be.service;
+package erni.betterask.eats.be.service.establishment.mock;
 
 import erni.betterask.eats.be.model.Review;
+import erni.betterask.eats.be.service.establishment.ReviewsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class EstablishmentReviewsServiceImpl implements EstablishmentReviewsService {
+public class ReviewsServiceImpl implements ReviewsService {
 
     private static final List<Review> mockedReviews = List.of(
             Review.builder()

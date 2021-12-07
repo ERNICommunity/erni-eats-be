@@ -1,4 +1,4 @@
-package erni.betterask.eats.be.service;
+package erni.betterask.eats.be.service.establishment;
 
 import erni.betterask.eats.be.model.Establishment;
 import erni.betterask.eats.be.model.Meal;
@@ -17,20 +17,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class EstablishmentMenuServiceImpl implements EstablishmentMenuService {
-    private final Logger logger = LoggerFactory.getLogger(EstablishmentMenuServiceImpl.class);
-    private final EstablishmentConfigurationService establishmentConfigurationService;
+public class MenuServiceImpl implements MenuService {
+    private final Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class);
+    private final ConfigurationService configurationService;
     private final WebClient webClient;
 
     @Autowired
-    public EstablishmentMenuServiceImpl(WebClient.Builder webClientBuilder, @Value( "${at11.endpoint.url}") String at11Url, EstablishmentConfigurationService establishmentConfigurationService) {
+    public MenuServiceImpl(WebClient.Builder webClientBuilder, @Value( "${at11.endpoint.url}") String at11Url, ConfigurationService configurationService) {
         this.webClient = webClientBuilder.baseUrl(at11Url).build();
-        this.establishmentConfigurationService = establishmentConfigurationService;
+        this.configurationService = configurationService;
     }
 
     @Override
     public Mono<List<Meal>> getMeals(String establishmentId, LocalDate date) {
-        var restaurantId = establishmentConfigurationService.findById(establishmentId).map(Establishment::getRestaurantId).orElseThrow();
+        var restaurantId = configurationService.findById(establishmentId).map(Establishment::getRestaurantId).orElseThrow();
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
