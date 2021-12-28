@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.Resource;
@@ -35,12 +36,13 @@ import java.util.Optional;
 
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(EstablishmentsController.class)
-public class EstablishmentsControllerTest {
+class EstablishmentsControllerTest {
 
     @Autowired
     WebTestClient webTestClient;
 
     @MockBean
+    @Qualifier("mockService")
     ConfigurationService configurationService;
     @MockBean
     MenuService menuService;
@@ -59,7 +61,7 @@ public class EstablishmentsControllerTest {
     }
 
     @Test
-    public void shouldReturnEstablishments() {
+    void shouldReturnEstablishments() {
         Establishment establishment = Establishment.builder()
                 .id("id-1")
                 .restaurantId("restaurantId")
@@ -85,7 +87,7 @@ public class EstablishmentsControllerTest {
     }
 
     @Test
-    public void shouldReturnEstablishmentById() {
+    void shouldReturnEstablishmentById() {
         Establishment establishment = Establishment.builder()
                 .id("id-1")
                 .restaurantId("restaurantId")
@@ -110,7 +112,7 @@ public class EstablishmentsControllerTest {
     }
 
     @Test
-    public void shouldReturn404WhenEstablishmentIdIsNotFound() {
+    void shouldReturn404WhenEstablishmentIdIsNotFound() {
         when(configurationService.findById(anyString())).thenReturn(Optional.empty());
 
         webTestClient.get()
@@ -121,7 +123,7 @@ public class EstablishmentsControllerTest {
     }
 
     @Test
-    public void shouldReturnDailyMenuForToday() {
+    void shouldReturnDailyMenuForToday() {
         var meal = Meal.builder()
                 .name("Gulas")
                 .type(MealType.MAIN_DISH)
@@ -140,7 +142,7 @@ public class EstablishmentsControllerTest {
     }
 
     @Test
-    public void shouldReturnDailyMenuForPassedDate() {
+    void shouldReturnDailyMenuForPassedDate() {
         var date = LocalDate.of(2020, 1, 1);
         var meal = Meal.builder()
                 .name("Gulas")
@@ -162,7 +164,7 @@ public class EstablishmentsControllerTest {
     }
 
     @Test
-    public void shouldReturnEstablishmentLogo() {
+    void shouldReturnEstablishmentLogo() {
         Establishment establishment = Establishment.builder()
                 .id("clock-block")
                 .restaurantId("restaurantId")

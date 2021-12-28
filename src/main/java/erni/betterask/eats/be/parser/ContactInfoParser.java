@@ -47,7 +47,7 @@ public class ContactInfoParser {
                 .build();
     }
 
-    private static List<OpenHours> getOpenHours(String openHoursContent) {
+    protected static List<OpenHours> getOpenHours(String openHoursContent) {
         return Arrays
                 .stream(openHoursContent.split("\r\n"))
                 .map(weekday -> weekday.split("\\s+"))
@@ -56,23 +56,22 @@ public class ContactInfoParser {
                         String.format(
                                 "%s–%s",
                                 clearCharsTime(dayTimePerWeekday[1]),
-                                clearCharsTime(dayTimePerWeekday[3])))
-                )
+                                clearCharsTime(dayTimePerWeekday[3]))))
                 .collect(Collectors.toList());
     }
 
-    private static String getAddress(String addressContent) {
+    protected static String getAddress(String addressContent) {
         List<String> addressFields = Arrays
                 .stream(addressContent.split("\r\n"))
                 .collect(Collectors.toList());
         return String.format("%s, %s", addressFields.get(1), addressFields.get(2));
     }
 
-    private static String clearCharsDay(String value) {
+    protected static String clearCharsDay(String value) {
         return value.replaceAll("[:\\p{Z}]", "");
     }
 
-    private static String clearCharsTime(String value) {
-        return value.replaceAll("[^a-zA-Z0-9:]", "");
+    protected static String clearCharsTime(String value) {
+        return value.replaceAll("[^0-9:]", "");
     }
 }

@@ -36,7 +36,7 @@ public class EstablishmentsController {
     @Autowired
     public EstablishmentsController(
             Clock clock,
-            @Qualifier("parsedService")ConfigurationService configurationService,
+            @Qualifier("mockService")ConfigurationService configurationService,
             MenuService menuService,
             ReviewsService reviewsService) {
         super();
