@@ -2,6 +2,7 @@ package erni.betterask.eats.be.parser;
 
 import erni.betterask.eats.be.model.ContactInfo;
 import erni.betterask.eats.be.model.OpenHours;
+import erni.betterask.eats.be.parser.constant.Constant;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -21,15 +22,17 @@ public class ContactInfoParser {
         List<OpenHours> openHours = null;
         String address = null;
         try {
-            String url = "https://clockblock.sk/KONTAKT/";
-            doc = Jsoup.parse(new URL(url).openStream(), "UTF-8", url);
+            doc = Jsoup.parse(
+                    new URL(Constant.CLOCK_BLOCK_CONTACT_INFO_URL).openStream(),
+                    "UTF-8",
+                    Constant.CLOCK_BLOCK_CONTACT_INFO_URL);
 
             Elements preElement = doc.select("pre");
 
             String openHoursContent = preElement.get(0).text();
-            String addressContent = preElement.get(1).html();
-
             openHours = getOpenHours(openHoursContent);
+
+            String addressContent = preElement.get(1).html();
             address = getAddress(addressContent);
         } catch (IOException e) {
             e.printStackTrace();
