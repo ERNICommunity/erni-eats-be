@@ -1,8 +1,10 @@
-package erni.betterask.eats.be.service.establishment;
+package erni.betterask.eats.be.service.establishment.at11;
 
 import erni.betterask.eats.be.model.Establishment;
 import erni.betterask.eats.be.model.Meal;
 import erni.betterask.eats.be.model.at11.MenuResult;
+import erni.betterask.eats.be.service.establishment.ConfigurationService;
+import erni.betterask.eats.be.service.establishment.MenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
