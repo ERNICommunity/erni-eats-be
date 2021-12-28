@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ReviewsServiceImpl implements ReviewsService {
+public class ReviewsServiceMockImpl implements ReviewsService {
 
     private static final List<Review> mockedReviews = List.of(
             Review.builder()

@@ -7,6 +7,7 @@ import erni.betterask.eats.be.service.establishment.ConfigurationService;
 import erni.betterask.eats.be.service.establishment.MenuService;
 import erni.betterask.eats.be.service.establishment.ReviewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,7 +36,7 @@ public class EstablishmentsController {
     @Autowired
     public EstablishmentsController(
             Clock clock,
-            ConfigurationService configurationService,
+            @Qualifier("parsedService")ConfigurationService configurationService,
             MenuService menuService,
             ReviewsService reviewsService) {
         super();

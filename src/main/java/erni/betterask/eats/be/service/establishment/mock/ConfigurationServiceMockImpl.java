@@ -2,19 +2,19 @@ package erni.betterask.eats.be.service.establishment.mock;
 
 import erni.betterask.eats.be.model.*;
 import erni.betterask.eats.be.service.establishment.ConfigurationService;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-public class ConfigurationServiceImpl implements ConfigurationService {
-    private static final List<Establishment> mockedEstablishments = List.of(
+@Component("mockService")
+public class ConfigurationServiceMockImpl implements ConfigurationService {
+    private static final List<Establishment> establishments = List.of(
             Establishment.builder()
                     .id("clock-block")
                     .restaurantId("einpark-1")
                     .name("Clock Block")
-                    .description("Local beer & restaurant")
+                    .description("Localbeer & Restaurant")
                     .type(EstablishmentType.RESTAURANT)
                     .websiteUrl("https://clockblock.sk/")
                     .dailyMenuUrl("https://restauracie.sme.sk/restauracia/clock-block_8537-petrzalka_664/denne-menu")
@@ -211,12 +211,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Override
     public List<Establishment> findAll() {
-        return mockedEstablishments;
+        return establishments;
     }
 
     @Override
     public Optional<Establishment> findById(String id) {
-        return mockedEstablishments.stream()
+        return establishments.stream()
                 .filter(establishment -> establishment.id.equals(id))
                 .findFirst();
     }

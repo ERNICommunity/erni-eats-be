@@ -8,6 +8,7 @@ import erni.betterask.eats.be.service.establishment.MenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -25,7 +26,7 @@ public class MenuServiceImpl implements MenuService {
     private final WebClient webClient;
 
     @Autowired
-    public MenuServiceImpl(WebClient.Builder webClientBuilder, @Value( "${at11.endpoint.url}") String at11Url, ConfigurationService configurationService) {
+    public MenuServiceImpl(WebClient.Builder webClientBuilder, @Value( "${at11.endpoint.url}") String at11Url, @Qualifier("parsedService")ConfigurationService configurationService) {
         this.webClient = webClientBuilder.baseUrl(at11Url).build();
         this.configurationService = configurationService;
     }
