@@ -1,38 +1,42 @@
-package erni.betterask.eats.be.parser;
+package erni.betterask.eats.be.service.establishment.parser;
 
 import erni.betterask.eats.be.model.ContactInfo;
 import erni.betterask.eats.be.model.OpenHours;
-import erni.betterask.eats.be.parser.constant.Constant;
+import io.vavr.collection.List;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
+@Component
 public class ContactInfoParser {
 
-    private ContactInfoParser() {}
+    public static final String CLOCK_BLOCK_WEB_URL = "https://clockblock.sk";
+    public static final String CLOCK_BLOCK_CONTACT_INFO_URL = "https://clockblock.sk/KONTAKT";
+
+    private ContactInfoParser() {
+    }
 
     public static ContactInfo getContactInfoParsed() {
-        Document doc;
-        List<OpenHours> openHours = null;
-        String address = null;
+        var address = "";
+        var openHours = List.empty();
         try {
-            doc = Jsoup.parse(
-                    new URL(Constant.CLOCK_BLOCK_CONTACT_INFO_URL).openStream(),
+            var doc = Jsoup.parse(
+                    new URL(CLOCK_BLOCK_CONTACT_INFO_URL).openStream(),
                     "UTF-8",
-                    Constant.CLOCK_BLOCK_CONTACT_INFO_URL);
+                    CLOCK_BLOCK_CONTACT_INFO_URL);
 
-            Elements preElement = doc.select("pre");
+            var preElement = doc.select("pre");
 
-            String openHoursContent = preElement.get(0).text();
+            var openHoursContent = preElement.get(0).text();
             openHours = getOpenHours(openHoursContent);
 
-            String addressContent = preElement.get(1).html();
+            var addressContent = preElement.get(1).html();
             address = getAddress(addressContent);
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,7 +51,7 @@ public class ContactInfoParser {
                 .build();
     }
 
-    protected static List<OpenHours> getOpenHours(String openHoursContent) {
+    public static List<OpenHours> getOpenHours(String openHoursContent) {
         return Arrays
                 .stream(openHoursContent.split("\r\n"))
                 .map(weekday -> weekday.split("\\s+"))
@@ -60,18 +64,15 @@ public class ContactInfoParser {
                 .collect(Collectors.toList());
     }
 
-    protected static String getAddress(String addressContent) {
-        List<String> addressFields = Arrays
-                .stream(addressContent.split("\r\n"))
-                .collect(Collectors.toList());
-        return String.format("%s, %s", addressFields.get(1), addressFields.get(2));
+    public static String getAddress(String addressContent) {
+        return addressContent.replaceAll("\r\n","");
     }
 
-    protected static String clearCharsDay(String value) {
+    public static String clearCharsDay(String value) {
         return value.replaceAll("[:\\p{Z}]", "");
     }
 
-    protected static String clearCharsTime(String value) {
+    public static String clearCharsTime(String value) {
         return value.replaceAll("[^0-9:]", "");
     }
 }

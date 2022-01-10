@@ -1,14 +1,13 @@
-package erni.betterask.eats.be.service.establishment.parsed;
+package erni.betterask.eats.be.service.establishment.parser;
 
 import erni.betterask.eats.be.model.*;
-import erni.betterask.eats.be.parser.ContactInfoParser;
 import erni.betterask.eats.be.service.establishment.ConfigurationService;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Component("parsedService")
+@Service("parsedService")
 public class ConfigurationServiceImpl implements ConfigurationService {
     @Override
     public List<Establishment> findAll() {

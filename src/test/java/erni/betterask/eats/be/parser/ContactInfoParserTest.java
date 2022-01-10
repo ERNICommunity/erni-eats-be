@@ -1,18 +1,22 @@
 package erni.betterask.eats.be.parser;
 
-import erni.betterask.eats.be.model.OpenHours;
+import erni.betterask.eats.be.service.establishment.parser.ContactInfoParser;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ContactInfoParserTest {
+@Slf4j
+@ExtendWith(MockitoExtension.class)
+public class ContactInfoParserTest {
 
     @Test
     void getOpenHoursTest() {
-        // given
-        String openHoursContent = """
+        var content = """
                 Pondelok: 11:00 - 22:00 hod\r
                 Utorok:   11:03 - 22:00 hod\r
                 Streda:   11:03 - 22:00 hod\r
@@ -21,43 +25,49 @@ class ContactInfoParserTest {
                 sobota:   15:03 - 00:00 hod\r
                 nedeľa:  15:03 - 22:00 hod""";
 
-        // when
-        List<OpenHours> result = ContactInfoParser.getOpenHours(openHoursContent);
+        // exercise
+        var result = ContactInfoParser.getOpenHours(content);
 
-        // then
-        assertEquals(7, result.size());
-        assertEquals("Pondelok", result.get(0).getDay());
-        assertEquals("11:00–22:00", result.get(0).getOpenHours());
-        assertEquals("Piatok", result.get(4).getDay());
-        assertEquals("11:03–00:00", result.get(4).getOpenHours());
-        assertEquals("nedeľa", result.get(6).getDay());
-        assertEquals("15:03–22:00", result.get(6).getOpenHours());
+        // verify
+        assertThat(result.size()).isEqualTo(7);
+        assertThat(result.get(0).getDay()).isEqualTo("Pondelok");
+        assertThat(result.get(0).getOpenHours()).isEqualTo("11:00–22:00");
+        assertThat(result.get(1).getDay()).isEqualTo("Utorok");
+        assertThat(result.get(1).getOpenHours()).isEqualTo("11:03-22:00");
+        assertThat(result.get(2).getDay()).isEqualTo("Streda");
+        assertThat(result.get(2).getOpenHours()).isEqualTo("11:03-22:00");
+        assertThat(result.get(3).getDay()).isEqualTo("štvrtok");
+        assertThat(result.get(3).getOpenHours()).isEqualTo("11:03-22:00");
+        assertThat(result.get(4).getDay()).isEqualTo("Piatok");
+        assertThat(result.get(4).getOpenHours()).isEqualTo("11:03-00:00");
+        assertThat(result.get(5).getDay()).isEqualTo("sobota");
+        assertThat(result.get(5).getOpenHours()).isEqualTo("15:03-00:00");
+        assertThat(result.get(6).getDay()).isEqualTo("nedeľa");
+        assertThat(result.get(6).getOpenHours()).isEqualTo("15:03-22:00");
     }
 
     @Test
     void getAddressTest() {
-        // given
-        String addressContent = """
+        var content = """
                 CLOCK-BLOCK Localbeer &amp; Restaurant\r
                 Zadunajská cesta 12\r
                 851 01 Bratislava""";
 
-        // when
-        String result = ContactInfoParser.getAddress(addressContent);
+        // exercise
+        var result = ContactInfoParser.getAddress(content);
 
-        // then
+        // verify
         assertEquals("Zadunajská cesta 12, 851 01 Bratislava", result);
     }
 
     @Test
     void clearCharsDayTest() {
-        // given
-        String input = "štvrtok:  ";
+        var input = "štvrtok:  ";
 
-        // when
-        String result = ContactInfoParser.clearCharsDay(input);
+        // exercise
+        var result = ContactInfoParser.clearCharsDay(input);
 
-        // then
+        // verify
         assertEquals("štvrtok", result);
     }
 
