@@ -3,6 +3,7 @@ package erni.betterask.eats.be.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -15,10 +16,10 @@ public class ContactInfo {
     @NonNull
     public String establishmentId;
 
-    @NonNull
+    @Nullable
     public String address;
 
-    @NonNull
+    @Nullable
     public List<OpenHours> openHours;
 
     @NonNull

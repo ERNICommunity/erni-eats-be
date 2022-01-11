@@ -1,8 +1,10 @@
 package erni.betterask.eats.be.model;
 
+import io.vavr.collection.List;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.lang.Nullable;
 
 @Data
 @Builder
@@ -39,5 +41,12 @@ public class Establishment {
 
     public PriceLevel priceLevel;
 
-    public ContactInfo contactInfo;
+    @Nullable
+    public String address;
+
+    @Nullable
+    public List<OpenHours> openHours;
+
+    @NonNull
+    public String coordinates;
 }

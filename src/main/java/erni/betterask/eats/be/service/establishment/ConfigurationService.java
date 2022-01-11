@@ -1,11 +1,10 @@
 package erni.betterask.eats.be.service.establishment;
 
 import erni.betterask.eats.be.model.Establishment;
-
-import java.util.List;
-import java.util.Optional;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
 
 public interface ConfigurationService {
     List<Establishment> findAll();
-    Optional<Establishment> findById(String id);
+    Option<Establishment> findById(String id);
 }
