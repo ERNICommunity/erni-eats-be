@@ -1,13 +1,12 @@
 package erni.betterask.eats.be.controller;
 
-import erni.betterask.eats.be.model.Meal;
-import erni.betterask.eats.be.model.Establishment;
-import erni.betterask.eats.be.model.EstablishmentType;
-import erni.betterask.eats.be.model.PriceLevel;
-import erni.betterask.eats.be.model.MealType;
+import erni.betterask.eats.be.model.*;
 import erni.betterask.eats.be.service.establishment.ConfigurationService;
 import erni.betterask.eats.be.service.establishment.MenuService;
 import erni.betterask.eats.be.service.establishment.ReviewsService;
+import io.vavr.collection.List;
+import io.vavr.control.Option;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,20 +21,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.mockito.Mockito.*;
-import static org.hamcrest.CoreMatchers.*;
-
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(EstablishmentsController.class)
+@Slf4j
 class EstablishmentsControllerTest {
 
     @Autowired
@@ -62,7 +59,7 @@ class EstablishmentsControllerTest {
 
     @Test
     void shouldReturnEstablishments() {
-        Establishment establishment = Establishment.builder()
+        var establishment = Establishment.builder()
                 .id("id-1")
                 .restaurantId("restaurantId")
                 .name("My Restaurant")
@@ -73,7 +70,11 @@ class EstablishmentsControllerTest {
                 .priceLevel(PriceLevel.MODERATE)
                 .rating(4.9f)
                 .userRatingsTotal(666)
+                .address("Some address")
+                .openHours(null)
+                .coordinates("45, 50")
                 .build();
+
         when(configurationService.findAll()).thenReturn(List.of(establishment));
 
         webTestClient.get()
@@ -88,7 +89,7 @@ class EstablishmentsControllerTest {
 
     @Test
     void shouldReturnEstablishmentById() {
-        Establishment establishment = Establishment.builder()
+        var establishment = Establishment.builder()
                 .id("id-1")
                 .restaurantId("restaurantId")
                 .name("My Restaurant")
@@ -99,8 +100,11 @@ class EstablishmentsControllerTest {
                 .priceLevel(PriceLevel.MODERATE)
                 .rating(4.9f)
                 .userRatingsTotal(666)
+                .address("Some address")
+                .openHours(null)
+                .coordinates("45, 50")
                 .build();
-        when(configurationService.findById(anyString())).thenReturn(Optional.of(establishment));
+        when(configurationService.findById(anyString())).thenReturn(Option.of(establishment));
 
         webTestClient.get()
                 .uri("/api/v1/establishments/id-1")
@@ -113,7 +117,7 @@ class EstablishmentsControllerTest {
 
     @Test
     void shouldReturn404WhenEstablishmentIdIsNotFound() {
-        when(configurationService.findById(anyString())).thenReturn(Optional.empty());
+        when(configurationService.findById(anyString())).thenReturn(Option.none());
 
         webTestClient.get()
                 .uri("/api/v1/establishments/id-2")
@@ -129,8 +133,9 @@ class EstablishmentsControllerTest {
                 .type(MealType.MAIN_DISH)
                 .price(BigDecimal.TEN)
                 .build();
-        when(menuService.getMeals("id-1", LocalDate.of(2020, 1, 1))).thenReturn(Mono.just(Collections.emptyList()));
-        when(menuService.getMeals("id-1", LocalDate.now(clock))).thenReturn(Mono.just(List.of(meal)));
+        var meals = Mono.just(List.of(meal));
+        //when(menuService.getMeals("id-1", LocalDate.of(2020, 1, 1))).thenReturn(Mono.just(List.empty()));
+        when(menuService.getMeals("id-1", LocalDate.now(clock))).thenReturn(meals);
 
         webTestClient.get()
                 .uri("/api/v1/establishments/id-1/daily-menu")
@@ -155,7 +160,7 @@ class EstablishmentsControllerTest {
                 .uri(uriBuilder -> uriBuilder
                         .path("/api/v1/establishments/id-1/daily-menu")
                         .queryParam("date", date.format(DateTimeFormatter.ISO_LOCAL_DATE))
-                        .build() )
+                        .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus().isOk()
@@ -176,8 +181,11 @@ class EstablishmentsControllerTest {
                 .priceLevel(PriceLevel.MODERATE)
                 .rating(4.9f)
                 .userRatingsTotal(666)
+                .address("Some address")
+                .openHours(null)
+                .coordinates("45, 50")
                 .build();
-        when(configurationService.findById(anyString())).thenReturn(Optional.of(establishment));
+        when(configurationService.findById(anyString())).thenReturn(Option.of(establishment));
 
         webTestClient.get()
                 .uri("/api/v1/establishments/clock-block/logo")

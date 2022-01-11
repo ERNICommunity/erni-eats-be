@@ -5,6 +5,7 @@ import erni.betterask.eats.be.model.Meal;
 import erni.betterask.eats.be.model.at11.MenuResult;
 import erni.betterask.eats.be.service.establishment.ConfigurationService;
 import erni.betterask.eats.be.service.establishment.MenuService;
+import io.vavr.collection.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,7 +34,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public Mono<List<Meal>> getMeals(String establishmentId, LocalDate date) {
-        var restaurantId = configurationService.findById(establishmentId).map(Establishment::getRestaurantId).orElseThrow();
+        var restaurantId = configurationService.findById(establishmentId).map(Establishment::getRestaurantId).getOrElseThrow(NoSuchElementException::new);
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
@@ -46,7 +47,7 @@ public class MenuServiceImpl implements MenuService {
                 .map(MenuResult::getMenu)
                 .map(menu -> menu.stream()
                         .map(Meal::fromMenuItem)
-                        .collect(Collectors.toList())
+                        .collect(List.collector())
                 );
     }
 }
